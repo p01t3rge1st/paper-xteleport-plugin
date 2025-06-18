@@ -1,9 +1,11 @@
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/util/XpScoreboardManager.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XdCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XTpaCommand.java
+/home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/listeners/SkillsMenuListener.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XHomeCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/XTeleportPlugin.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/util/WarpManager.java
+/home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XMenuCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XBackCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XSetWarpCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/listeners/PlayerMoveListener.java
@@ -11,3 +13,4 @@
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XWarpCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XTpaConfCommand.java
 /home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/commands/XDeleteWarpCommand.java
+/home/mati/Dokumenty/plugins/paper-xteleport-plugin/src/main/java/com/example/xteleport/util/SkillsMenuManager.java

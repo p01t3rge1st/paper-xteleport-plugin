@@ -58,7 +58,7 @@ public class TeleportManager implements Listener {
         teleportWithDelay(player, location);
     }
 
-    private void teleportWithDelay(Player player, Location target) {
+    public void teleportWithDelay(Player player, Location target) {
         if (pendingTeleports.containsKey(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "Teleportation already in progress!");
             return;
@@ -136,6 +136,11 @@ public class TeleportManager implements Listener {
                     } else {
                         player.sendMessage(ChatColor.RED + "You moved! Teleportation cancelled.");
                     }
+                    player.sendTitle(
+                        ChatColor.RED + "Link disrupted!",
+                        ChatColor.DARK_RED + "Teleportation interrupted",
+                        5, 40, 10
+                    );
                     cancel();
                     particleTask.cancel();
                     pendingTeleports.remove(player.getUniqueId());

@@ -1,9 +1,12 @@
-name: XTeleport
-version: 1.0
+name: xlink
+version: 1.2
 main: com.example.xteleport.XTeleportPlugin
 api-version: 1.21
 author: YourName
 commands:
+  xlink:
+    description: Show help for xlink plugin
+    usage: /xlink help
   xhome:
     description: Teleport to your home location.
     usage: /xhome
@@ -28,3 +31,6 @@ commands:
   xdeletewarp:
     description: Delete a global warp
     usage: /xdeletewarp <name>
+  xmenu:
+    description: Open the X-Link skills menu or toggle keybind
+    usage: /xmenu [on|off]

@@ -12,6 +12,7 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 public class SkillEffects {
+    public static volatile boolean disruptionActive = false;
     // Skulc Shock: zakłóca sensory i wardena, efekt jak w ancient city
     public static void skulcShock(Player player) {
         int cost = 200;
@@ -73,7 +74,9 @@ public class SkillEffects {
         // Po 10s info
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
             player.sendActionBar(ChatColor.GRAY + "Disruption ended.");
+            disruptionActive = false;
         }, 200);
+        disruptionActive = true;
     }
 
     // SCAN: laser od guardiana, sensory na jasno, shrine na czerwono

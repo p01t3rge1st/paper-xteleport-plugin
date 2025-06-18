@@ -128,14 +128,10 @@ public class TeleportManager implements Listener {
                     pendingTeleports.remove(player.getUniqueId());
                     return;
                 }
-                if (player.getLocation().distance(startLoc) > 0.2) {
-                    player.removePotionEffect(PotionEffectType.SPEED);
-                    if (timeLeft == 0) {
-                        player.getWorld().strikeLightning(player.getLocation());
-                        player.sendMessage(ChatColor.RED + "You moved in the last second! You have been struck by lightning!");
-                    } else {
-                        player.sendMessage(ChatColor.RED + "You moved! Teleportation cancelled.");
-                    }
+                Location current = player.getLocation();
+                if (current.getX() != startLoc.getX() || current.getY() != startLoc.getY() || current.getZ() != startLoc.getZ()) {
+                    // Anuluj teleportację
+                    player.sendMessage(ChatColor.RED + "You moved! Teleportation cancelled.");
                     player.sendTitle(
                         ChatColor.RED + "Link disrupted!",
                         ChatColor.DARK_RED + "Teleportation interrupted",
@@ -165,8 +161,8 @@ public class TeleportManager implements Listener {
 
                     // --- ANCIENT CITY / DEEP DARK CHECK ---
                     Biome biome = player.getLocation().getBlock().getBiome();
-                    if (biome == Biome.DEEP_DARK || biome.name().contains("ANCIENT_CITY")) {
-                        // Dźwięki
+                    if ((biome == Biome.DEEP_DARK || biome.name().contains("ANCIENT_CITY")) && !SkillEffects.disruptionActive) {
+                        // Dźwięki i efekty nieudanej teleportacji
                         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_WITHER_BREAK_BLOCK, 1, 1);
                         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_SPAWN, 1, 1);
 

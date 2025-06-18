@@ -1,0 +1,30 @@
+name: XTeleport
+version: 1.0
+main: com.example.xteleport.XTeleportPlugin
+api-version: 1.21
+author: YourName
+commands:
+  xhome:
+    description: Teleport to your home location.
+    usage: /xhome
+  xtpa:
+    description: Teleport to another player or set XP cost.
+    usage: /xtpa <player> | /xtpa xpcost <constant|by_distance> <xp_per_block>
+  xtpaconf:
+    description: Konfiguracja kosztu XP za teleportację.
+    usage: /xtpaconf <constant|by_distance> <xp_per_block>
+  xd:
+    description: Show your current raw XP points.
+    usage: /xd
+  xback:
+    description: Teleport to your last death location.
+    usage: /xback
+  xsetwarp:
+    description: Set a global warp
+    usage: /xsetwarp <name>
+  xwarp:
+    description: Teleport to a global warp
+    usage: /xwarp <name>
+  xdeletewarp:
+    description: Delete a global warp
+    usage: /xdeletewarp <name>

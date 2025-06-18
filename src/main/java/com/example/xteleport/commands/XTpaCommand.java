@@ -42,7 +42,7 @@ public class XTpaCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            sender.sendMessage(ChatColor.RED + "Użycie: /xtpa <gracz>");
+            sender.sendMessage(ChatColor.RED + "Usage: /xtpa <player>");
             return true;
         }
 
@@ -52,12 +52,12 @@ public class XTpaCommand implements CommandExecutor {
                 try {
                     float value = Float.parseFloat(args[2]);
                     TeleportManager.setXpCostMode(mode, value);
-                    sender.sendMessage(ChatColor.GREEN + "Ustawiono koszt XP: " + mode + " (" + value + ")");
+                    sender.sendMessage(ChatColor.GREEN + "XP cost set: " + mode + " (" + value + ")");
                 } catch (NumberFormatException e) {
-                    sender.sendMessage(ChatColor.RED + "Podaj poprawną liczbę.");
+                    sender.sendMessage(ChatColor.RED + "Please enter a valid number.");
                 }
             } else {
-                sender.sendMessage(ChatColor.RED + "Użycie: /xtpa xpcost <constant|by_distance> <xp_per_block>");
+                sender.sendMessage(ChatColor.RED + "Usage: /xtpa xpcost <constant|by_distance> <xp_per_block>");
             }
             return true;
         }

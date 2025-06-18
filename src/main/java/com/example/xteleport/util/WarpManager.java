@@ -7,7 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WarpManager {
@@ -61,5 +63,9 @@ public class WarpManager {
         warps.remove(name.toLowerCase());
         warpsConfig.set(name.toLowerCase(), null);
         saveWarps();
+    }
+
+    public List<String> getAllWarpNames() {
+        return new ArrayList<>(warps.keySet());
     }
 }

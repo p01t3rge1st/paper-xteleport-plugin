@@ -38,15 +38,53 @@ public class SkillsMenuManager {
         pearl.setItemMeta(pearlMeta);
         inv.setItem(0, pearl);
 
-        // 2. slot: Book (Skills - Coming soon)
+        // 2. slot: Book (Skills - kliknij by otworzyć menu skilli)
         ItemStack book = new ItemStack(Material.ENCHANTED_BOOK);
         ItemMeta bookMeta = book.getItemMeta();
-        bookMeta.setDisplayName("§dSkills §7(Coming soon)");
+        bookMeta.setDisplayName("§dSkills §7(Kliknij)");
         book.setItemMeta(bookMeta);
         inv.setItem(1, book);
 
+        // 3. slot: Bed (Teleport to Home)
+        ItemStack bed = new ItemStack(Material.RED_BED);
+        ItemMeta bedMeta = bed.getItemMeta();
+        bedMeta.setDisplayName("§6Teleport to Home");
+        bed.setItemMeta(bedMeta);
+        inv.setItem(2, bed);
+
         player.openInventory(inv);
         player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.7f, 1.2f);
+    }
+
+    public static void openSkillsMenu(Player player) {
+        Inventory inv = Bukkit.createInventory(null, 9, SKILLS_TITLE);
+
+        // 1. slot: Wither Skull (Skulc Shock)
+        ItemStack witherSkull = new ItemStack(Material.WITHER_SKELETON_SKULL);
+        ItemMeta witherMeta = witherSkull.getItemMeta();
+        witherMeta.setDisplayName("§cSkulc Shock §7(200 XP)");
+        witherMeta.setLore(List.of("§7Zakłóca wardena i sensory", "§7Efekt jak w Ancient City"));
+        witherSkull.setItemMeta(witherMeta);
+        inv.setItem(0, witherSkull);
+
+        // 2. slot: Sculk (Scan)
+        ItemStack sculk = new ItemStack(Material.SCULK);
+        ItemMeta sculkMeta = sculk.getItemMeta();
+        sculkMeta.setDisplayName("§bScan §7(25 XP)");
+        sculkMeta.setLore(List.of("§7Laser wykrywający sensory i shrinery"));
+        sculk.setItemMeta(sculkMeta);
+        inv.setItem(1, sculk);
+
+        // 3. slot: Fire Charge (Fireball)
+        ItemStack fireball = new ItemStack(Material.FIRE_CHARGE);
+        ItemMeta fireballMeta = fireball.getItemMeta();
+        fireballMeta.setDisplayName("§6Fireball §7(100 XP)");
+        fireballMeta.setLore(List.of("§7Wystrzeliwuje fireballa jak ghast"));
+        fireball.setItemMeta(fireballMeta);
+        inv.setItem(2, fireball);
+
+        player.openInventory(inv);
+        player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.7f, 1.2f);
     }
 
     public static void openTeleportMenu(Player player) {

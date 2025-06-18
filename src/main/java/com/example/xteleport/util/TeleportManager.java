@@ -332,4 +332,13 @@ public class TeleportManager implements Listener {
         player.setLevel(0);
         player.giveExp(total);
     }
+
+    public void teleportHome(Player player) {
+        Location home = player.getBedSpawnLocation();
+        if (home == null) {
+            player.sendMessage("§cYou don't have a home set!");
+            return;
+        }
+        teleportWithDelay(player, home); // lub inna Twoja metoda teleportacji z opóźnieniem
+    }
 }

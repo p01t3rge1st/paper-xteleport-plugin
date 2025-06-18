@@ -4,9 +4,11 @@ import com.example.xteleport.commands.XBackCommand;
 import com.example.xteleport.commands.XDeleteWarpCommand;
 import com.example.xteleport.commands.XHomeCommand;
 import com.example.xteleport.commands.XMenuCommand;
+import com.example.xteleport.commands.XSkillCommand;
 import com.example.xteleport.commands.XTpaCommand;
 import com.example.xteleport.commands.XTpaConfCommand;
 import com.example.xteleport.commands.XdCommand;
+import com.example.xteleport.commands.WarpTabCompleter;
 import com.example.xteleport.listeners.SkillsMenuListener;
 import com.example.xteleport.util.SkillsMenuManager;
 import com.example.xteleport.util.TeleportManager;
@@ -42,6 +44,11 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
         getCommand("xwarp").setExecutor(new XWarpCommand(warpManager, teleportManager));
         getCommand("xdeletewarp").setExecutor(new XDeleteWarpCommand(warpManager));
         getCommand("xmenu").setExecutor(new XMenuCommand());
+        getCommand("xskill").setExecutor(new XSkillCommand());
+
+        // Set tab completers
+        getCommand("xwarp").setTabCompleter(new WarpTabCompleter(warpManager));
+        getCommand("xdeletewarp").setTabCompleter(new WarpTabCompleter(warpManager));
 
         // Start XP HUD updater
         new BukkitRunnable() {

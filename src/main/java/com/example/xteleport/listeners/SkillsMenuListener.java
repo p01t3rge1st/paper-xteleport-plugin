@@ -41,23 +41,43 @@ public class SkillsMenuListener implements Listener {
             ItemStack clicked = event.getCurrentItem();
             if (clicked == null || !clicked.hasItemMeta()) return;
             ItemMeta meta = clicked.getItemMeta();
-            if (meta.getDisplayName().contains("Teleport")) {
+
+            if (meta.getDisplayName().contains("Teleport to Player")) {
+                player.closeInventory();
                 SkillsMenuManager.openTeleportMenu(player);
+                return;
             }
-            // Book - coming soon, nic nie rób
+            if (meta.getDisplayName().contains("Teleport to Home")) {
+                player.closeInventory();
+                player.performCommand("xhome");
+                return;
+            }
+            if (meta.getDisplayName().contains("Skills")) {
+                player.closeInventory();
+                SkillsMenuManager.openSkillsMenu(player);
+                return;
+            }
         } else if (title.equals("§aTeleport to Player")) {
             event.setCancelled(true);
             ItemStack clicked = event.getCurrentItem();
             if (clicked == null || !clicked.hasItemMeta()) return;
             if (clicked.getType() == Material.PLAYER_HEAD) {
                 String name = ChatColor.stripColor(clicked.getItemMeta().getDisplayName());
-                Player target = Bukkit.getPlayerExact(name);
-                if (target != null && target.isOnline()) {
-                    player.closeInventory();
-                    teleportManager.teleportPlayerToPlayer(player, target);
-                } else {
-                    player.sendMessage(ChatColor.RED + "Player is not online.");
-                }
+                player.closeInventory();
+                player.performCommand("xtpa " + name);
+            }
+        } else if (title.equals("§dSkills (Coming Soon)") || title.equals("§dSkills §7(Kliknij)")) {
+            event.setCancelled(true);
+            ItemStack clicked = event.getCurrentItem();
+            if (clicked == null || !clicked.hasItemMeta()) return;
+            Material type = clicked.getType();
+            player.closeInventory();
+            if (type == Material.WITHER_SKELETON_SKULL) {
+                player.performCommand("xskill skulcshock");
+            } else if (type == Material.SCULK) {
+                player.performCommand("xskill scan");
+            } else if (type == Material.FIRE_CHARGE) {
+                player.performCommand("xskill fireball");
             }
         }
     }

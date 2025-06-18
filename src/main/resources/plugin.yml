@@ -34,3 +34,6 @@ commands:
   xmenu:
     description: Open the X-Link skills menu or toggle keybind
     usage: /xmenu [on|off]
+  xskill:
+    description: Użyj specjalnych umiejętności
+    usage: /xskill <skulcshock|scan|fireball>

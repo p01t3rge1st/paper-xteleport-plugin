@@ -19,13 +19,13 @@ public class XHomeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "Tylko gracze mogą używać tej komendy.");
+            sender.sendMessage(ChatColor.RED + "Only players can use this command.");
             return true;
         }
         Player player = (Player) sender;
         Location home = player.getBedSpawnLocation();
         if (home == null) {
-            player.sendMessage(ChatColor.RED + "Nie masz ustawionego punktu home (łóżka)!");
+            player.sendMessage(ChatColor.RED + "You don't have a home set (bed)!");
             return true;
         }
         teleportManager.teleportPlayerToLocation(player, home);

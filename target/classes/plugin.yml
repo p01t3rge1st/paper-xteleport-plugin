@@ -37,3 +37,6 @@ commands:
   xskill:
     description: Użyj specjalnych umiejętności
     usage: /xskill <skulcshock|scan|fireball>
+  tellnobenio:
+    description: Send a message to everyone except the selected player
+    usage: /tellnobenio <player> <message>

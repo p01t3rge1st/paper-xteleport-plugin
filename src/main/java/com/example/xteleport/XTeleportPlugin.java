@@ -22,8 +22,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.example.xteleport.commands.TellNoBenioCommand;
 
 public class XTeleportPlugin extends JavaPlugin implements Listener {
     private WarpManager warpManager;
@@ -45,6 +47,7 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
         getCommand("xdeletewarp").setExecutor(new XDeleteWarpCommand(warpManager));
         getCommand("xmenu").setExecutor(new XMenuCommand());
         getCommand("xskill").setExecutor(new XSkillCommand());
+        getCommand("tellnobenio").setExecutor(new TellNoBenioCommand());
 
         // Set tab completers
         getCommand("xwarp").setTabCompleter(new WarpTabCompleter(warpManager));
@@ -85,5 +88,23 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
         Player player = event.getPlayer();
         player.sendTitle(ChatColor.AQUA + "X-link active", "", 10, 40, 10);
         player.sendMessage(ChatColor.GREEN + "Hello " + player.getName() + "! Use " + ChatColor.YELLOW + "/xlink help" + ChatColor.GREEN + " for command list.");
+    }
+
+    @Override
+    public void onDisable() {
+        // Title dla wszystkich graczy
+        for (Player player : getServer().getOnlinePlayers()) {
+            player.sendTitle("§cServer is reloading", "", 10, 40, 10);
+        }
+    }
+
+    // (opcjonalnie, jeśli chcesz mieć listener)
+    @EventHandler
+    public void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin() == this) {
+            for (Player player : getServer().getOnlinePlayers()) {
+                player.sendTitle("§cServer is reloading", "", 10, 40, 10);
+            }
+        }
     }
 }

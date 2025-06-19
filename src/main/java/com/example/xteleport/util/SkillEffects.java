@@ -23,16 +23,16 @@ public class SkillEffects {
         TeleportManager.takeRawXp(player, cost);
 
         Location center = player.getLocation();
-        int radius = 30;
-        int height = 5;
+        int radius = 20;
+        int minY = -2, maxY = 2; // przeszukuj od 2 bloki pod do 2 bloki nad graczem
         List<Location> sculks = new ArrayList<>();
-        List<LivingEntity> wardens = new ArrayList<>();
+        List<LivingEntity> mobs = new ArrayList<>();
 
-        // Zbierz wszystkie sculk sensory i shriekery w promieniu 30
+        // Zbierz sculk sensory i shriekery w okręgu r=20 i wysokości od -2 do +2
         for (int x = -radius; x <= radius; x++) {
             for (int z = -radius; z <= radius; z++) {
                 if (x * x + z * z > radius * radius) continue;
-                for (int y = 0; y < height; y++) {
+                for (int y = minY; y <= maxY; y++) {
                     Location loc = center.clone().add(x, y, z);
                     Block block = loc.getBlock();
                     if (block.getType() == Material.SCULK_SENSOR || block.getType().name().contains("SCULK_SHRIEKER")) {
@@ -41,16 +41,25 @@ public class SkillEffects {
                 }
             }
         }
-        // Znajdź wardena w promieniu 30
-        for (Entity e : player.getWorld().getNearbyEntities(center, radius, height, radius)) {
-            if (e.getType() == EntityType.WARDEN && e instanceof LivingEntity living) {
-                wardens.add(living);
+        // Znajdź wszystkie moby (nie tylko wardena) w promieniu 20
+        for (Entity e : player.getWorld().getNearbyEntities(center, radius, 5, radius)) {
+            if (e instanceof LivingEntity living && !(living instanceof Player)) {
+                mobs.add(living);
             }
         }
 
         // Efekt dźwiękowy na starcie
         player.getWorld().playSound(center, Sound.ENTITY_WITHER_AMBIENT, 1.2f, 0.7f);
         player.getWorld().playSound(center, Sound.BLOCK_PORTAL_AMBIENT, 1.2f, 1.2f);
+
+        // Wskaźnik czasu na hotbarze
+        int duration = 10; // sekund
+        for (int i = 0; i < duration; i++) {
+            int secondsLeft = duration - i;
+            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
+                player.sendActionBar(ChatColor.AQUA + "SCULC SHOCK: " + ChatColor.YELLOW + "Disrupting (" + secondsLeft + "s left)");
+            }, i * 20L);
+        }
 
         // Pulsowanie przez 10 sekund (20 razy co 0.5s)
         int pulses = 20;
@@ -61,21 +70,18 @@ public class SkillEffects {
                     loc.getWorld().playSound(loc, Sound.BLOCK_SCULK_SENSOR_CLICKING, 1, 1);
                     loc.getWorld().spawnParticle(Particle.SONIC_BOOM, loc.clone().add(0.5, 0.5, 0.5), 1, 0, 0, 0, 0);
                 }
-                for (LivingEntity warden : wardens) {
-                    warden.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20, 10, false, false, false));
-                    warden.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, warden.getLocation().add(0,2,0), 30, 1, 1, 1, 0.2);
+                for (LivingEntity mob : mobs) {
+                    mob.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 20, 10, false, false, false));
+                    mob.getWorld().spawnParticle(Particle.ELECTRIC_SPARK, mob.getLocation().add(0,2,0), 30, 1, 1, 1, 0.2);
                 }
             }, delay);
         }
-
-        // Hotbar info
-        player.sendActionBar(ChatColor.AQUA + "SCULC SHOCK: " + ChatColor.YELLOW + "Disrupting sensors & shriekers for 10s!");
 
         // Po 10s info
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
             player.sendActionBar(ChatColor.GRAY + "Disruption ended.");
             disruptionActive = false;
-        }, 200);
+        }, duration * 20L);
         disruptionActive = true;
     }
 
@@ -93,6 +99,14 @@ public class SkillEffects {
         int radius = 15;
         boolean found = false;
 
+        int duration = 10; // seconds
+        for (int i = 0; i < duration; i++) {
+            int secondsLeft = duration - i;
+            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
+                player.sendActionBar(ChatColor.AQUA + "SCAN: " + ChatColor.YELLOW + "Active (" + secondsLeft + "s left)");
+            }, i * 20L);
+        }
+
         // Przeszukaj kulę o promieniu 15 bloków
         for (int dx = -radius; dx <= radius; dx++) {
             for (int dy = -radius; dy <= radius; dy++) {
@@ -103,7 +117,7 @@ public class SkillEffects {
                     boolean isSensor = block.getType() == Material.SCULK_SENSOR;
                     boolean isShrieker = block.getType().name().contains("SCULK_SHRIEKER");
                     if (isSensor || isShrieker) {
-                        // Laser od gracza do bloku
+                        // Laser od gracza do bloku (dwukrotnie gęstszy)
                         Location laserStart = center.clone();
                         Location laserEnd = block.getLocation().clone().add(0.5, 0.5, 0.5);
                         Vector laserDir = laserEnd.toVector().subtract(laserStart.toVector()).normalize();
@@ -111,7 +125,7 @@ public class SkillEffects {
                         Particle.DustOptions dust = isSensor
                             ? new Particle.DustOptions(org.bukkit.Color.fromRGB(0, 200, 255), 2.0f) // blue
                             : new Particle.DustOptions(org.bukkit.Color.fromRGB(255, 0, 0), 2.0f);   // red
-                        for (double d = 0; d < distance; d += 0.5) {
+                        for (double d = 0; d < distance; d += 0.25) { // DWUKROTNIE GĘSTSZY LASER
                             Location laserPoint = laserStart.clone().add(laserDir.clone().multiply(d));
                             world.spawnParticle(Particle.DUST, laserPoint, 1, 0, 0, 0, 0, dust);
                         }
@@ -152,10 +166,12 @@ public class SkillEffects {
             }
         }
 
+        Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
+            player.sendActionBar(ChatColor.GRAY + "Scan ended.");
+        }, duration * 20L);
+
         if (!found) {
             player.sendMessage(ChatColor.GRAY + "No sculk sensors or shriekers detected nearby.");
-        } else {
-            player.sendActionBar(ChatColor.AQUA + "SCAN: " + ChatColor.YELLOW + "Target detected!");
         }
         world.playSound(player.getLocation(), Sound.ENTITY_GUARDIAN_ATTACK, 1, 1.2f);
     }
@@ -169,6 +185,14 @@ public class SkillEffects {
         }
         TeleportManager.takeRawXp(player, cost);
 
+        int duration = 5;
+        for (int i = 0; i < duration; i++) {
+            int secondsLeft = duration - i;
+            Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
+                player.sendActionBar(ChatColor.GOLD + "FIREBALL: " + ChatColor.YELLOW + secondsLeft + "s cooldown");
+            }, i * 20L);
+        }
+
         Location loc = player.getEyeLocation();
         Vector dir = loc.getDirection().normalize();
         Fireball fireball = player.getWorld().spawn(loc.add(dir.multiply(1.5)), Fireball.class);
@@ -178,8 +202,6 @@ public class SkillEffects {
         fireball.setIsIncendiary(true);
 
         player.getWorld().playSound(loc, Sound.ENTITY_GHAST_SHOOT, 1, 1);
-
-        player.sendActionBar(ChatColor.GOLD + "FIREBALL!");
     }
 
 }

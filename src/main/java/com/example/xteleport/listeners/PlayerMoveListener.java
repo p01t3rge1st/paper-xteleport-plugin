@@ -15,7 +15,11 @@ public class PlayerMoveListener implements Listener {
 
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (teleportManager.isTeleporting(event.getPlayer())) {
+        if (!teleportManager.isTeleporting(event.getPlayer())) return;
+        // Anuluj TYLKO jeśli zmieniła się pozycja (X/Y/Z), a nie tylko obrót głowy
+        if (event.getFrom().getX() != event.getTo().getX()
+                || event.getFrom().getY() != event.getTo().getY()
+                || event.getFrom().getZ() != event.getTo().getZ()) {
             teleportManager.cancelTeleport(event.getPlayer());
         }
     }

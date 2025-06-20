@@ -29,7 +29,7 @@ public class WarpManager {
         warps.clear();
         for (String name : warpsConfig.getKeys(false)) {
             Location loc = warpsConfig.getLocation(name);
-            if (loc != null) {
+            if (loc != null && loc.getWorld() != null) {
                 warps.put(name.toLowerCase(), loc);
             }
         }
@@ -42,7 +42,7 @@ public class WarpManager {
         try {
             warpsConfig.save(warpsFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe("Failed to save warps.yml: " + e.getMessage());
         }
     }
 

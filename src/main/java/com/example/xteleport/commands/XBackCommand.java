@@ -1,5 +1,6 @@
 package com.example.xteleport.commands;
 
+import com.example.xteleport.util.ConfigManager;
 import com.example.xteleport.util.TeleportManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,19 +25,19 @@ public class XBackCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
         Location deathLoc = TeleportManager.getLastDeathLocation(player);
-        if (deathLoc == null) {
-            player.sendMessage(ChatColor.RED + "No death location found!");
+        if (deathLoc == null || deathLoc.getWorld() == null) {
+            player.sendMessage(ChatColor.RED + "No valid death location found!");
             return true;
         }
-        int cost = 7;
+        int cost = ConfigManager.getXBackXpCost();
         int xp = TeleportManager.getTotalExperience(player);
         if (xp < cost) {
-            player.sendMessage(ChatColor.RED + "You need at least 7 XP to use /xback!");
+            player.sendMessage(ChatColor.RED + "You need at least " + cost + " XP to use /xback!");
             return true;
         }
         TeleportManager.takeRawXp(player, cost);
         player.teleport(deathLoc);
-        player.sendMessage(ChatColor.GREEN + "Teleported to your last death location! (-7 XP)");
+        player.sendMessage(ChatColor.GREEN + "Teleported to your last death location! (-" + cost + " XP)");
         return true;
     }
 }

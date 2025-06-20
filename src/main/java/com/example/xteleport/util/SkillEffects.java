@@ -13,17 +13,19 @@ import java.util.*;
 
 public class SkillEffects {
     public static volatile boolean disruptionActive = false;
-    // Skulc Shock: zakłóca sensory i wardena, efekt jak w ancient city
+
     public static void skulcShock(Player player) {
-        int cost = 200;
+        int cost = ConfigManager.getSkulcShockXpCost();
+        int radius = ConfigManager.getSkulcShockRadius();
+        int duration = ConfigManager.getSkulcShockDuration();
+        // Skulc Shock: zakłóca sensory i wardena, efekt jak w ancient city
         if (TeleportManager.getTotalExperience(player) < cost) {
-            player.sendMessage(ChatColor.RED + "You need 200 XP!");
+            player.sendMessage(ChatColor.RED + "You need " + cost + " XP!");
             return;
         }
         TeleportManager.takeRawXp(player, cost);
 
         Location center = player.getLocation();
-        int radius = 20;
         int minY = -2, maxY = 2; // przeszukuj od 2 bloki pod do 2 bloki nad graczem
         List<Location> sculks = new ArrayList<>();
         List<LivingEntity> mobs = new ArrayList<>();
@@ -53,7 +55,6 @@ public class SkillEffects {
         player.getWorld().playSound(center, Sound.BLOCK_PORTAL_AMBIENT, 1.2f, 1.2f);
 
         // Wskaźnik czasu na hotbarze
-        int duration = 10; // sekund
         for (int i = 0; i < duration; i++) {
             int secondsLeft = duration - i;
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
@@ -87,19 +88,19 @@ public class SkillEffects {
 
     // SCAN: laser od guardiana, sensory na jasno, shrine na czerwono
     public static void scan(Player player) {
-        int cost = 25;
+        int cost = ConfigManager.getScanXpCost();
+        int radius = ConfigManager.getScanRadius();
+        int duration = ConfigManager.getScanDuration();
         if (TeleportManager.getTotalExperience(player) < cost) {
-            player.sendMessage(ChatColor.RED + "You need 25 XP!");
+            player.sendMessage(ChatColor.RED + "You need " + cost + " XP!");
             return;
         }
         TeleportManager.takeRawXp(player, cost);
 
         Location center = player.getLocation().clone().add(0, 1, 0); // waist height
         World world = player.getWorld();
-        int radius = 15;
         boolean found = false;
 
-        int duration = 10; // seconds
         for (int i = 0; i < duration; i++) {
             int secondsLeft = duration - i;
             Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
@@ -178,9 +179,9 @@ public class SkillEffects {
 
     // Fireball: wystrzeliwuje fireballa od gracza
     public static void fireball(Player player) {
-        int cost = 100;
+        int cost = ConfigManager.getFireballXpCost();
         if (TeleportManager.getTotalExperience(player) < cost) {
-            player.sendMessage(ChatColor.RED + "You need 100 XP!");
+            player.sendMessage(ChatColor.RED + "You need " + cost + " XP!");
             return;
         }
         TeleportManager.takeRawXp(player, cost);
@@ -204,4 +205,18 @@ public class SkillEffects {
         player.getWorld().playSound(loc, Sound.ENTITY_GHAST_SHOOT, 1, 1);
     }
 
+    // NOWY SKILL: fullbright
+    public static void fullbright(Player player) {
+        int cost = ConfigManager.getFullbrightXpCost();
+        int duration = ConfigManager.getFullbrightDuration();
+        if (TeleportManager.getTotalExperience(player) < cost) {
+            player.sendMessage(ChatColor.RED + "You need " + cost + " XP!");
+            return;
+        }
+        TeleportManager.takeRawXp(player, cost);
+
+        player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, duration * 20, 0, false, false, false));
+        player.sendMessage(ChatColor.GOLD + "Fullbright enabled for " + duration + " seconds! (-" + cost + " XP)");
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1.5f);
+    }
 }

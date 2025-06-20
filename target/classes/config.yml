@@ -1,0 +1,20 @@
+scan:
+  radius: 15
+  duration: 10
+  xp_cost: 25
+
+skulcshock:
+  radius: 20
+  duration: 10
+  xp_cost: 200
+
+fireball:
+  xp_cost: 100
+
+fullbright:
+  xp_cost: 50
+  duration: 30
+
+teleport:
+  xp_cost_mode: by_distance
+  xp_cost_value: 0.05

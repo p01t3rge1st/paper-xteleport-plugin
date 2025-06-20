@@ -16,7 +16,7 @@ public class XSkillCommand implements CommandExecutor {
             return true;
         }
         if (args.length != 1) {
-            player.sendMessage(ChatColor.YELLOW + "Usage: /xskill <skulcshock|scan|fireball>");
+            player.sendMessage(ChatColor.YELLOW + "Usage: /xskill <skulcshock|scan|fireball|fullbright>");
             return true;
         }
         String skill = args[0].toLowerCase();
@@ -24,6 +24,7 @@ public class XSkillCommand implements CommandExecutor {
             case "skulcshock" -> SkillEffects.skulcShock(player);
             case "scan" -> SkillEffects.scan(player);
             case "fireball" -> SkillEffects.fireball(player);
+            case "fullbright" -> SkillEffects.fullbright(player);
             default -> player.sendMessage(ChatColor.RED + "Unknown skill!");
         }
         return true;

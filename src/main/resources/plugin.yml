@@ -36,7 +36,11 @@ commands:
     usage: /xmenu [on|off]
   xskill:
     description: Użyj specjalnych umiejętności
-    usage: /xskill <skulcshock|scan|fireball>
+    usage: /xskill <skulcshock|scan|fireball|fullbright>
   tellnobenio:
     description: Send a message to everyone except the selected player
     usage: /tellnobenio <player> <message>
+  xlinkreload:
+    description: Reload xlink config
+    usage: /xlinkreload
+    permission: xlink.reload

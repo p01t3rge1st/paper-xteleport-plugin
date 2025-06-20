@@ -20,7 +20,7 @@ public class TeleportManager implements Listener {
     private static float xpCostValue = 5.0f; // domyślnie 5 poziomów
     private final JavaPlugin plugin;
     private final Map<UUID, BukkitRunnable> pendingTeleports = new HashMap<>();
-    private static final Map<UUID, Location> lastDeathLocation = new HashMap<>();
+    private static final Map<UUID, Location> lastDeathLocation = new java.util.concurrent.ConcurrentHashMap<>();
 
     public TeleportManager(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -67,7 +67,7 @@ public class TeleportManager implements Listener {
         double distance = player.getLocation().distance(target);
         int cost = getXpCost(player.getLocation(), target);
 
-        // NOWY KOD: czas zależny od dystansu
+        // Dynamiczny czas: 1 sekunda za każde 100 bloków, max 5 sekund
         int seconds = (int) Math.ceil(distance / 100.0);
         if (seconds < 1) seconds = 1;
         if (seconds > 5) seconds = 5;
@@ -220,7 +220,11 @@ public class TeleportManager implements Listener {
                     takeRawXp(player, cost);
 
                     // Teleport and effects
-                    player.teleport(target);
+                    boolean success = player.teleport(target);
+                    if (!success) {
+                        player.sendMessage(ChatColor.RED + "Teleportation failed! (chunk not loaded?)");
+                        return;
+                    }
                     player.getWorld().strikeLightningEffect(target);
                     player.playSound(target, Sound.ENTITY_ENDERMAN_TELEPORT, 1, 1);
 
@@ -274,6 +278,13 @@ public class TeleportManager implements Listener {
             task.cancel();
             player.sendMessage(ChatColor.RED + "Teleportation cancelled due to movement.");
         }
+    }
+
+    public void cancelAllTeleports() {
+        for (BukkitRunnable task : pendingTeleports.values()) {
+            task.cancel();
+        }
+        pendingTeleports.clear();
     }
 
     @EventHandler
@@ -340,5 +351,10 @@ public class TeleportManager implements Listener {
             return;
         }
         teleportWithDelay(player, home); // lub inna Twoja metoda teleportacji z opóźnieniem
+    }
+
+    public static void loadXpCostFromConfig() {
+        xpCostMode = ConfigManager.getTeleportXpCostMode();
+        xpCostValue = ConfigManager.getTeleportXpCostValue();
     }
 }

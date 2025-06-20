@@ -63,7 +63,10 @@ public class SkillsMenuManager {
         ItemStack witherSkull = new ItemStack(Material.WITHER_SKELETON_SKULL);
         ItemMeta witherMeta = witherSkull.getItemMeta();
         witherMeta.setDisplayName("§cSkulc Shock §7(200 XP)");
-        witherMeta.setLore(List.of("§7Zakłóca wardena i sensory", "§7Efekt jak w Ancient City"));
+        witherMeta.setLore(List.of(
+            "§7Disrupts all Deep Dark energy",
+            "§7Affects wardens, sensors and shriekers"
+        ));
         witherSkull.setItemMeta(witherMeta);
         inv.setItem(0, witherSkull);
 
@@ -71,7 +74,9 @@ public class SkillsMenuManager {
         ItemStack sculk = new ItemStack(Material.SCULK);
         ItemMeta sculkMeta = sculk.getItemMeta();
         sculkMeta.setDisplayName("§bScan §7(25 XP)");
-        sculkMeta.setLore(List.of("§7Laser wykrywający sensory i shrinery"));
+        sculkMeta.setLore(List.of(
+            "§7Laser detects all mobs and sculks"
+        ));
         sculk.setItemMeta(sculkMeta);
         inv.setItem(1, sculk);
 
@@ -79,9 +84,22 @@ public class SkillsMenuManager {
         ItemStack fireball = new ItemStack(Material.FIRE_CHARGE);
         ItemMeta fireballMeta = fireball.getItemMeta();
         fireballMeta.setDisplayName("§6Fireball §7(100 XP)");
-        fireballMeta.setLore(List.of("§7Wystrzeliwuje fireballa jak ghast"));
+        fireballMeta.setLore(List.of(
+            "§7Shoots a fireball like a ghast"
+        ));
         fireball.setItemMeta(fireballMeta);
         inv.setItem(2, fireball);
+
+        // 4. slot: Glowstone Dust (Fullbright)
+        ItemStack fullbright = new ItemStack(Material.GLOWSTONE_DUST);
+        ItemMeta fullbrightMeta = fullbright.getItemMeta();
+        fullbrightMeta.setDisplayName("§eFullbright §7(50 XP)");
+        fullbrightMeta.setLore(List.of(
+            "§7Gives you maximum brightness",
+            "§7for a limited time"
+        ));
+        fullbright.setItemMeta(fullbrightMeta);
+        inv.setItem(3, fullbright);
 
         player.openInventory(inv);
         player.playSound(player.getLocation(), Sound.BLOCK_ENCHANTMENT_TABLE_USE, 0.7f, 1.2f);

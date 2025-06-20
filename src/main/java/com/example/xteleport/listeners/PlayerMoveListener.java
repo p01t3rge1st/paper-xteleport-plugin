@@ -23,4 +23,8 @@ public class PlayerMoveListener implements Listener {
             teleportManager.cancelTeleport(event.getPlayer());
         }
     }
+
+    public void unregister() {
+        org.bukkit.event.HandlerList.unregisterAll((org.bukkit.plugin.Plugin) this);
+    }
 }

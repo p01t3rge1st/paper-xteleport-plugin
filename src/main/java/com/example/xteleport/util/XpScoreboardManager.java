@@ -50,4 +50,8 @@ public class XpScoreboardManager {
     public static boolean isHidden(Player player) {
         return hidden.contains(player.getUniqueId());
     }
+
+    public static void clearAll() {
+        hidden.clear();
+    }
 }

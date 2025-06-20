@@ -78,6 +78,8 @@ public class SkillsMenuListener implements Listener {
                 player.performCommand("xskill scan");
             } else if (type == Material.FIRE_CHARGE) {
                 player.performCommand("xskill fireball");
+            } else if (type == Material.GLOWSTONE_DUST) {
+                player.performCommand("xskill fullbright");
             }
         }
     }

@@ -4,6 +4,7 @@ import com.example.xteleport.util.WarpManager;
 import com.example.xteleport.util.TeleportManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -34,7 +35,22 @@ public class XWarpCommand implements CommandExecutor {
             return true;
         }
         Location loc = warpManager.getWarp(name);
-        teleportManager.teleportWithDelay(player, loc); // użyj tej samej metody co xhome
+        if (loc == null) {
+            player.sendMessage(ChatColor.RED + "Warp location is invalid or missing!");
+            return true;
+        }
+        World playerWorld = player.getWorld();
+        World warpWorld = loc.getWorld();
+        if (warpWorld == null) {
+            player.sendMessage(ChatColor.RED + "Warp world does not exist!");
+            return true;
+        }
+        // Blokada teleportacji do innego wymiaru
+        if (!playerWorld.getUID().equals(warpWorld.getUID())) {
+            player.sendMessage(ChatColor.RED + "You cannot warp to another dimension!");
+            return true;
+        }
+        teleportManager.teleportWithDelay(player, loc);
         return true;
     }
 }

@@ -13,8 +13,8 @@ public class XTpaCommand implements CommandExecutor {
 
     private final TeleportManager teleportManager;
 
-    public XTpaCommand(JavaPlugin plugin) {
-        this.teleportManager = new TeleportManager(plugin);
+    public XTpaCommand(TeleportManager teleportManager) {
+        this.teleportManager = teleportManager;
     }
 
     @Override

@@ -22,6 +22,10 @@ public class XSetWarpCommand implements CommandExecutor {
             sender.sendMessage("Only players can use this command.");
             return true;
         }
+        if (!player.hasPermission("xlink.setwarp")) {
+            player.sendMessage(ChatColor.RED + "You don't have permission to set warps!");
+            return true;
+        }
         if (args.length != 1) {
             player.sendMessage(ChatColor.RED + "Usage: /xsetwarp <name>");
             return true;

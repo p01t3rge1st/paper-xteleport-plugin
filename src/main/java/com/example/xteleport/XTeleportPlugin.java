@@ -3,6 +3,7 @@ package com.example.xteleport;
 import com.example.xteleport.commands.XBackCommand;
 import com.example.xteleport.commands.XDeleteWarpCommand;
 import com.example.xteleport.commands.XHomeCommand;
+import com.example.xteleport.commands.XLinkReloadCommand;
 import com.example.xteleport.commands.XMenuCommand;
 import com.example.xteleport.commands.XSkillCommand;
 import com.example.xteleport.commands.XTpaCommand;
@@ -10,6 +11,7 @@ import com.example.xteleport.commands.XTpaConfCommand;
 import com.example.xteleport.commands.XdCommand;
 import com.example.xteleport.commands.WarpTabCompleter;
 import com.example.xteleport.listeners.SkillsMenuListener;
+import com.example.xteleport.listeners.PlayerMoveListener;
 import com.example.xteleport.util.SkillsMenuManager;
 import com.example.xteleport.util.TeleportManager;
 import com.example.xteleport.util.XpScoreboardManager;
@@ -26,6 +28,7 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.plugin.java.JavaPlugin;
 import com.example.xteleport.commands.TellNoBenioCommand;
+import com.example.xteleport.util.ConfigManager;
 
 public class XTeleportPlugin extends JavaPlugin implements Listener {
     private WarpManager warpManager;
@@ -33,14 +36,17 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+        ConfigManager.init(this);
+        TeleportManager.loadXpCostFromConfig();
+        warpManager = new WarpManager(this);
+        teleportManager = new TeleportManager(this);
+
         getCommand("xhome").setExecutor(new XHomeCommand(this));
-        getCommand("xtpa").setExecutor(new XTpaCommand(this));
+        getCommand("xtpa").setExecutor(new XTpaCommand(teleportManager));
         getCommand("xtpaconf").setExecutor(new XTpaConfCommand());
         getCommand("xd").setExecutor(new XdCommand());
         getCommand("xback").setExecutor(new XBackCommand(this));
-
-        warpManager = new WarpManager(this);
-        teleportManager = new TeleportManager(this);
 
         getCommand("xsetwarp").setExecutor(new XSetWarpCommand(warpManager));
         getCommand("xwarp").setExecutor(new XWarpCommand(warpManager, teleportManager));
@@ -48,6 +54,7 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
         getCommand("xmenu").setExecutor(new XMenuCommand());
         getCommand("xskill").setExecutor(new XSkillCommand());
         getCommand("tellnobenio").setExecutor(new TellNoBenioCommand());
+        getCommand("xlinkreload").setExecutor(new XLinkReloadCommand(this));
 
         // Set tab completers
         getCommand("xwarp").setTabCompleter(new WarpTabCompleter(warpManager));
@@ -71,6 +78,7 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
 
         Bukkit.getPluginManager().registerEvents(this, this);
         getServer().getPluginManager().registerEvents(new SkillsMenuListener(teleportManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerMoveListener(teleportManager), this);
 
         getCommand("xlink").setExecutor((sender, command, label, args) -> {
             if (args.length > 0 && args[0].equalsIgnoreCase("help")) {
@@ -96,6 +104,9 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
         for (Player player : getServer().getOnlinePlayers()) {
             player.sendTitle("§cServer is reloading", "", 10, 40, 10);
         }
+        // Anuluj teleporty
+        if (teleportManager != null) teleportManager.cancelAllTeleports();
+        org.bukkit.event.HandlerList.unregisterAll((org.bukkit.plugin.Plugin) this);
     }
 
     // (opcjonalnie, jeśli chcesz mieć listener)

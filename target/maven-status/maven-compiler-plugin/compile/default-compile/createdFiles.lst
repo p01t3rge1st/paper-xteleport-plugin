@@ -3,6 +3,7 @@ com/example/xteleport/util/SkillEffects.class
 com/example/xteleport/commands/XTpaCommand.class
 com/example/xteleport/util/ConfigManager.class
 com/example/xteleport/XTeleportPlugin$1.class
+com/example/xteleport/util/SkillEffects$1.class
 com/example/xteleport/commands/XSetWarpCommand.class
 com/example/xteleport/commands/XWarpCommand.class
 com/example/xteleport/listeners/PlayerMoveListener.class
@@ -23,4 +24,5 @@ com/example/xteleport/util/SkillsMenuManager.class
 com/example/xteleport/commands/XSkillCommand.class
 com/example/xteleport/util/TeleportManager.class
 com/example/xteleport/util/TeleportManager$1.class
+com/example/xteleport/listeners/SkillsMenuListener$1.class
 com/example/xteleport/commands/XMenuCommand.class

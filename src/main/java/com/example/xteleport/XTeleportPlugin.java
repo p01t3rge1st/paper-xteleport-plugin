@@ -71,7 +71,7 @@ public class XTeleportPlugin extends JavaPlugin implements Listener {
                     }
                 }
             }
-        }.runTaskTimer(this, 20, 20); // co sekundę
+        }.runTaskTimer(this, 20, 100); // co 5 sekund zamiast co sekundę
 
         // Zarejestruj event śmierci
         teleportManager.registerEvents();

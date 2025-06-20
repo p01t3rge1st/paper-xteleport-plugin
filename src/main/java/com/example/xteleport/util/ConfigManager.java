@@ -57,4 +57,16 @@ public class ConfigManager {
     public static float getTeleportXpCostValue() {
         return (float) config.getDouble("teleport.xp_cost_value", 5.0);
     }
+
+    public static int getDecoyXpCost() {
+        return config.getInt("decoy.xp_cost", 100);
+    }
+
+    public static int getDecoyDuration() {
+        return config.getInt("decoy.duration", 10);
+    }
+
+    public static int getDecoyRadius() {
+        return config.getInt("decoy.radius", 40);
+    }
 }

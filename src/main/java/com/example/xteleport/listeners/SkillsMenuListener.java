@@ -36,50 +36,29 @@ public class SkillsMenuListener implements Listener {
         Inventory inv = event.getInventory();
         String title = event.getView().getTitle();
 
-        if (title.equals("§bX-Link Skills")) {
+        if (title.equals("§bX-Link Menu")) {
             event.setCancelled(true);
             ItemStack clicked = event.getCurrentItem();
             if (clicked == null || !clicked.hasItemMeta()) return;
-            ItemMeta meta = clicked.getItemMeta();
-
-            if (meta.getDisplayName().contains("Teleport to Player")) {
-                player.closeInventory();
-                SkillsMenuManager.openTeleportMenu(player);
-                return;
-            }
-            if (meta.getDisplayName().contains("Teleport to Home")) {
-                player.closeInventory();
-                player.performCommand("xhome");
-                return;
-            }
-            if (meta.getDisplayName().contains("Skills")) {
-                player.closeInventory();
-                SkillsMenuManager.openSkillsMenu(player);
-                return;
+            Material type = clicked.getType();
+            player.closeInventory();
+            switch (type) {
+                case SCULK -> player.performCommand("xskill scan");
+                case GLOWSTONE_DUST -> player.performCommand("xskill fullbright");
+                case WITHER_SKELETON_SKULL -> player.performCommand("xskill skulcshock");
+                case RED_BED -> player.performCommand("xhome");
+                case ENDER_PEARL -> SkillsMenuManager.openTeleportMenu(player);
+                case FIRE_CHARGE -> player.performCommand("xskill fireball");
+                case TURTLE_EGG -> player.performCommand("xskill decoy");
             }
         } else if (title.equals("§aTeleport to Player")) {
             event.setCancelled(true);
             ItemStack clicked = event.getCurrentItem();
             if (clicked == null || !clicked.hasItemMeta()) return;
             if (clicked.getType() == Material.PLAYER_HEAD) {
-                String name = ChatColor.stripColor(clicked.getItemMeta().getDisplayName());
+                String name = org.bukkit.ChatColor.stripColor(clicked.getItemMeta().getDisplayName());
                 player.closeInventory();
                 player.performCommand("xtpa " + name);
-            }
-        } else if (title.equals("§dSkills (Coming Soon)") || title.equals("§dSkills §7(Kliknij)")) {
-            event.setCancelled(true);
-            ItemStack clicked = event.getCurrentItem();
-            if (clicked == null || !clicked.hasItemMeta()) return;
-            Material type = clicked.getType();
-            player.closeInventory();
-            if (type == Material.WITHER_SKELETON_SKULL) {
-                player.performCommand("xskill skulcshock");
-            } else if (type == Material.SCULK) {
-                player.performCommand("xskill scan");
-            } else if (type == Material.FIRE_CHARGE) {
-                player.performCommand("xskill fireball");
-            } else if (type == Material.GLOWSTONE_DUST) {
-                player.performCommand("xskill fullbright");
             }
         }
     }

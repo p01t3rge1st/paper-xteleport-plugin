@@ -25,6 +25,7 @@ public class XSkillCommand implements CommandExecutor {
             case "scan" -> SkillEffects.scan(player);
             case "fireball" -> SkillEffects.fireball(player);
             case "fullbright" -> SkillEffects.fullbright(player);
+            case "decoy" -> SkillEffects.decoy(player);
             default -> player.sendMessage(ChatColor.RED + "Unknown skill!");
         }
         return true;

@@ -161,11 +161,17 @@ public class SkillEffects {
         }
 
         // Glowing dla wszystkich mobów w promieniu 40 bloków
+        final int[] mobCount = {0};
+        int glowingTicks = duration * 20; // POPRAWKA: czas z configu
         for (Entity entity : world.getNearbyEntities(player.getLocation(), 40, 40, 40)) {
-            if (entity instanceof LivingEntity living && !(living instanceof Player)) {
-                living.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, 200, 1, false, false, false));
+            if (entity instanceof LivingEntity living) {
+                living.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, glowingTicks, 1, false, false, false));
+                mobCount[0]++;
             }
         }
+
+        // WYŚWIETL OD RAZU
+        player.sendMessage(ChatColor.AQUA + "Scan detected " + ChatColor.YELLOW + mobCount[0] + ChatColor.AQUA + " mobs.");
 
         Bukkit.getScheduler().runTaskLater(Bukkit.getPluginManager().getPlugin("xlink"), () -> {
             player.sendActionBar(ChatColor.GRAY + "Scan ended.");
@@ -218,5 +224,50 @@ public class SkillEffects {
         player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, duration * 20, 0, false, false, false));
         player.sendMessage(ChatColor.GOLD + "Fullbright enabled for " + duration + " seconds! (-" + cost + " XP)");
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BEACON_POWER_SELECT, 1, 1.5f);
+    }
+
+    public static void decoy(Player player) {
+        int cost = ConfigManager.getDecoyXpCost();
+        int duration = ConfigManager.getDecoyDuration();
+        int radius = ConfigManager.getDecoyRadius();
+
+        if (TeleportManager.getTotalExperience(player) < cost) {
+            player.sendMessage(ChatColor.RED + "You need " + cost + " XP!");
+            return;
+        }
+        TeleportManager.takeRawXp(player, cost);
+
+        // Zbierz moby, które będą focusować gracza
+        List<org.bukkit.entity.Mob> focusedMobs = new ArrayList<>();
+        for (Entity entity : player.getWorld().getNearbyEntities(player.getLocation(), radius, radius, radius)) {
+            if (entity instanceof org.bukkit.entity.Mob mob) {
+                mob.setTarget(player);
+                focusedMobs.add(mob);
+            }
+        }
+        player.sendMessage(ChatColor.GREEN + "Decoy activated! " + focusedMobs.size() + " mobs are now focusing you.");
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_TURTLE_EGG_CRACK, 1, 1.2f);
+
+        // Przez kilka sekund ponawiaj setTarget, by moby nie przestały gonić
+        new BukkitRunnable() {
+            int ticks = 0;
+            @Override
+            public void run() {
+                if (ticks++ >= duration) {
+                    // Po zakończeniu efektu resetuj targety
+                    for (org.bukkit.entity.Mob mob : focusedMobs) {
+                        if (mob.getTarget() != null && mob.getTarget().equals(player)) {
+                            mob.setTarget(null);
+                        }
+                    }
+                    player.sendMessage(ChatColor.GRAY + "Decoy effect ended. Mobs will now behave normally.");
+                    cancel();
+                    return;
+                }
+                for (org.bukkit.entity.Mob mob : focusedMobs) {
+                    mob.setTarget(player);
+                }
+            }
+        }.runTaskTimer(Bukkit.getPluginManager().getPlugin("xlink"), 0, 20); // co sekundę przez czas trwania
     }
 }

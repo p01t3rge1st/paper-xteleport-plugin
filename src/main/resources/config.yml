@@ -18,3 +18,8 @@ fullbright:
 teleport:
   xp_cost_mode: by_distance
   xp_cost_value: 0.05
+
+decoy:
+  xp_cost: 100
+  duration: 10
+  radius: 40
